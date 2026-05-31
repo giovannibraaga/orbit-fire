@@ -3,10 +3,10 @@ orbitfire:
     region: us-east-1
     profile: ""
     s3:
-      bucket-name: ${BUCKET_NAME}
-      daily-prefix: ${DAILY_PREFIX}
-      monthly-prefix: ${MONTHLY_PREFIX}
-      metadata: ${METADATA}
+      bucket-name: ${BUCKET_NAME:orbitfire}
+      daily-prefix: ${DAILY_PREFIX:raw/daily}
+      monthly-prefix: ${MONTHLY_PREFIX:raw/monthly}
+      metadata: ${METADATA:metadata/available-periods.json}
   cache:
     metadata-ttl-minutes: 10
     daily-ttl-minutes: 30

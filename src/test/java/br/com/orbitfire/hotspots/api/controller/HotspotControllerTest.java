@@ -100,6 +100,64 @@ class HotspotControllerTest {
     }
 
     @Test
+    void returns400WhenRiskIsOutsideValidRange() throws Exception {
+        mockMvc.perform(get("/v1/hotspots/daily/summary")
+                        .param("date", "2026-05-31")
+                        .param("riskMin", "-0.1"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void returns400WhenMinIsGreaterThanMax() throws Exception {
+        mockMvc.perform(get("/v1/hotspots/daily/summary")
+                        .param("date", "2026-05-31")
+                        .param("frpMin", "20")
+                        .param("frpMax", "10"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void returns400WhenHourWindowIsInvalid() throws Exception {
+        mockMvc.perform(get("/v1/hotspots/daily/summary")
+                        .param("date", "2026-05-31")
+                        .param("hourStart", "18")
+                        .param("hourEnd", "9"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void returns400WhenHourIsOutsideDayRange() throws Exception {
+        mockMvc.perform(get("/v1/hotspots/daily/summary")
+                        .param("date", "2026-05-31")
+                        .param("hourStart", "24"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void returns400WhenBboxCoordinatesAreInvalid() throws Exception {
+        mockMvc.perform(get("/v1/hotspots/daily/points")
+                        .param("date", "2026-05-31")
+                        .param("bbox", "-200,-10,-50,-5"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void returns400WhenBboxBoundsAreInverted() throws Exception {
+        mockMvc.perform(get("/v1/hotspots/daily/points")
+                        .param("date", "2026-05-31")
+                        .param("bbox", "-50,-10,-60,-5"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void returns400WhenTopNIsInvalid() throws Exception {
+        mockMvc.perform(get("/v1/hotspots/monthly/summary")
+                        .param("month", "2026-05")
+                        .param("topN", "0"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void returnsDailySummary() throws Exception {
         when(objectReader.readBytes(eq(DAILY_KEY)))
                 .thenReturn(TWO_ROWS_CSV.getBytes(StandardCharsets.UTF_8));

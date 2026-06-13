@@ -154,3 +154,27 @@ docker run -p 8080:8080 \
 ```
 
 O [Dockerfile](Dockerfile) usa build multi-stage (Temurin 17 JDK para compilar, JRE para rodar) e executa a aplicação como usuário não-root.
+
+## CI/CD (GitHub Actions + AWS ECS)
+
+Foi adicionado o workflow `/.github/workflows/ci-cd-ecs.yml` para:
+
+1. Rodar `./mvnw test` em push para `main`
+2. Buildar a imagem Docker
+3. Publicar a imagem no Amazon ECR
+4. Atualizar e fazer deploy da task definition no Amazon ECS
+
+### Pré-requisitos no GitHub
+
+Configure os itens abaixo no repositório:
+
+- **Secret**
+  - `AWS_ROLE_TO_ASSUME`: ARN da role AWS usada pelo GitHub Actions (OIDC) para acessar ECR/ECS
+
+- **Variables**
+  - `AWS_REGION`: região AWS (ex.: `us-east-1`)
+  - `ECR_REPOSITORY`: nome do repositório no ECR
+  - `ECS_CLUSTER`: nome do cluster ECS
+  - `ECS_SERVICE`: nome do serviço ECS
+  - `ECS_TASK_DEFINITION`: nome/ARN da task definition base
+  - `ECS_CONTAINER_NAME`: nome do container na task definition que receberá a nova imagem

@@ -4,6 +4,14 @@ OrbitFire Hotspots is a REST microservice for querying, filtering and aggregatin
 
 Daily and monthly source data is ingested as CSV files into Amazon S3. The service loads the required data on demand, applies in-memory filters and exposes both individual hotspot records and aggregated metrics for the OrbitFire frontend.
 
+## Platform Demo
+
+Watch the video demonstration of the OrbitFire platform:
+
+[![OrbitFire platform demonstration](https://img.youtube.com/vi/RNjbrtf7Bx0/maxresdefault.jpg)](https://www.youtube.com/watch?v=RNjbrtf7Bx0)
+
+*Demonstration of the OrbitFire interface and main features.*
+
 ## Stack
 
 - **Java 17** and **Spring Boot 4.0.6** with modular starters for Web MVC, Security, Jackson, Validation, Cache and Actuator
